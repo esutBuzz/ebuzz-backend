@@ -2,7 +2,7 @@
 
 ## Introduction
 
-eBuzz is a social media app that allows you to post anything (text, images, video, and/or audio) on a single post-it. A buzz is a single post on the eBuzz app, just like a tweet. Other users can reply to a buzz. Replying to a buzz is like adding a comment to a post (eBuzz). Although currently, this app will only accept texts as replies.
+eBuzz is a social media app that allows you to post anything (text, images, video, and/or audio) on a single post-it. A buzz is a single post on the eBuzz app, just like a tweet. Other users can reply to a buzz. Replying to a buzz is like adding a comment to a post (eBuzz).
 
 ## Project Requirements Satisfied
 
@@ -32,7 +32,7 @@ eBuzz is a social media app that allows you to post anything (text, images, vide
 
 ### Installation Guide
 
-- Clone this repository `https://github.com/kingsleycj/ebuzz-backend`
+- Clone this repository `https://github.com/esutBuzz/ebuzz-backend`
 
 - The `develop` branch is the most stable branch at any given time, ensure you're working from it.
 
