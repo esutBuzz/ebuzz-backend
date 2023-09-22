@@ -26,7 +26,7 @@ const connectToMongoDB = () => {
   mongoose.set("strictQuery", true);
   mongoose
     .connect(process.env.MONGO_DB_ATLAS, {
-      dbName: "Post-it-app",
+      dbName: "eBuzz",
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
