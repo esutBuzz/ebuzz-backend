@@ -3,8 +3,9 @@ const route = express.Router();
 const userRoute = require("./user.route");
 const postRoute = require("./post.route");
 const authRoute = require("./auth.route");
-const greeting = require("../utils/greeting")
-const likesRoute = require('../routes/likes.route');
+const likesRoute = require('./likes.route');
+// const greeting = require("../utils/greeting")rs
+
 
 // Calling all routes
 route
