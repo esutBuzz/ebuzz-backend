@@ -12,7 +12,7 @@ route
     .use("/", authRoute)
     .use("/users", userRoute)
     .use("/", postRoute)
-    .use('/likes', likesRoute)
+    .use('/', likesRoute)
 //   .get("/", (req, res) => {
 //     res.send(greeting);
 //   })
