@@ -1,18 +1,37 @@
 const Post = require("../models/post.model");
+const path = require('path');
+
+// Function to validate input fields
+const validateInput = (author, content) => {
+  if (!author || !content) {
+    throw new Error('Author and content are required fields.');
+  }
+  // You can add more validation checks as needed
+};
 
 // Create a new post
 exports.createPost = async (req, res) => {
   const { author, content } = req.body;
-  console.log(author)
+  validateInput(author, content);
+  console.log("authorId : " + author)
+  console.log(req.files)
+
+    const files = req.files || []; // Assuming req.files is an array of uploaded files
+    const filePaths = files.map(file => file.path); // Store file paths
+
   try {
     const post = await Post.create({
       author,
       content,
+      files: filePaths 
     });
-    res.status(201).json(post);
+    res.status(201).json({
+      message: "Post made successfully",
+      post: post
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Error occurred while creating post-its" });
+    res.status(500).json({ error: "Error occurred while creating post" });
   }
 };
 
@@ -25,7 +44,7 @@ exports.getAllPosts = async (req, res) => {
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Error occurred while fetching posts-its" });
+    res.status(500).json({ error: "Error occurred while fetching posts" });
   }
 };
 
@@ -37,7 +56,7 @@ exports.getAllPostsFromAHandle = async (req, res) => {
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Error occurred while fetching posts-its" });
+    res.status(500).json({ error: "Error occurred while fetching posts" });
   }
 };
 
@@ -50,12 +69,12 @@ exports.getPostById = async (req, res) => {
     })
     .populate({ path: "author", select: "username" });
     if (!post) {
-      return res.status(404).json({ error: "Post-it not found" });
+      return res.status(404).json({ error: "Post not found" });
     }
     res.status(200).json(post);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "An error occurred while fetching post-it" });
+    res.status(500).json({ error: "An error occurred while fetching post" });
   }
 };
 
@@ -68,14 +87,14 @@ exports.updatePostById = async (req, res) => {
       {
         new: true,
       }
-    ).populate("author", "content");
+    ).populate("author", "content", "image");
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
     res.status(200).json(post);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Error occurred while updating post-it" });
+    res.status(500).json({ error: "Error occurred while updating post" });
   }
 };
 

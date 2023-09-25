@@ -1,6 +1,6 @@
 const Post = require("../models/post.model")
 exports.likePost = async (req, res) => {
-    const { postId, userId } = req.body;
+    const { postId, userId } = req.params;
   
     try {
       // Find the post

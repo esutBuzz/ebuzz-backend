@@ -10,6 +10,7 @@ const app = express();
 
 // middleware and packages
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());

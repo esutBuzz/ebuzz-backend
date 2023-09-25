@@ -4,9 +4,9 @@ const likeController = require("../controllers/likes.controller")
 
 
 // Route to create a like
-router.post('/like', likeController.likePost);
+router.post('/users/:userId/posts/:postId/likePost', likeController.likePost);
 
 // Route to remove a like
-router.post('/unlike', likeController.unlikePost);
+router.post('/users/:userId/posts/:postId/unlikePost', likeController.unlikePost);
 
 module.exports = router;
