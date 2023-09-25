@@ -4,6 +4,7 @@ const userRoute = require("./user.route");
 const postRoute = require("./post.route");
 const authRoute = require("./auth.route");
 const likesRoute = require('./likes.route');
+const eventRoute = require("./event.route")
 // const greeting = require("../utils/greeting")rs
 
 
@@ -12,7 +13,8 @@ route
     .use("/", authRoute)
     .use("/users", userRoute)
     .use("/", postRoute)
-    .use('/', likesRoute)
+    .use("/", likesRoute)
+    .use("/", eventRoute)
 //   .get("/", (req, res) => {
 //     res.send(greeting);
 //   })

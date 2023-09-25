@@ -4,7 +4,10 @@ exports.createEvent =  async (req, res) => {
     try {
       const event = new Event(req.body);
       await event.save();
-      res.status(201).json(event);
+      res.status(201).json({
+        message: "New event created",
+        event: event
+      });
     } catch (error) {
         console.log(err);
       res.status(500).json({ error: 'Internal Server Error' });
