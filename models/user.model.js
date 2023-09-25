@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
-  {
+const userSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     avatar: {
         type: String
@@ -24,6 +23,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    events: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+      },
+    ],
   },
   {
     timestamps: true,

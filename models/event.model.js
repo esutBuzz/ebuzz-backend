@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
 const EventSchema = new mongoose.Schema({
   title: {
@@ -21,6 +22,8 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  files: {type: Schema.Types.Mixed},
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   host: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

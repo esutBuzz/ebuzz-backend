@@ -1,13 +1,13 @@
 const express = require("express")
 const router = express.Router()
 const eventController = require("../controllers/event.controller")
+const uploadMiddleware = require("../middlewares/uploadMiddleware")
 
-router.use()
 
-router.post('/events', eventController.createEvent)
-router.get('/events', eventController.getAllEvents)
-router.get('/events/:id', eventController.getEventById)
-router.put('/events/:id', eventController.updateEventById)
-router.delete('/events/:id', eventController.deleteEventById)
+router.post('/users/:userId/events', uploadMiddleware, eventController.createEvent)
+router.get('/users/:userId/events', eventController.getAllEvents)
+router.get('/users/:userId/events/:eventId', eventController.getEventById)
+router.put('/users/:userId/events/:eventId', eventController.updateEventById)
+router.delete('/users/:userId/events/:eventId', eventController.deleteEventById)
 
 module.exports = router;
