@@ -2,6 +2,7 @@ const Post = require("../models/post.model");
 
 // Create a new post
 exports.createPost = async (req, res) => {
+  console.log(req.file)
   const { author, content } = req.body;
   console.log(author)
   try {

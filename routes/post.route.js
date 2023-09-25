@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer")
+const upload = multer({dest: 'uploads/'});
 const postController = require("../controllers/post.controller");
 const commentRoute = require("./comment.route");
 
@@ -7,13 +9,13 @@ const commentRoute = require("./comment.route");
 router.use(commentRoute)
 
 // create a new post from a particular username
-router.post("/users/@:username/posts", postController.createPost);
+router.post("/users/@:username/posts", upload.single('postImage'), postController.createPost);
 
 // Get all posts from a particular username
 router.get("/users/@:username/posts", postController.getAllPostsFromAHandle);
 
 // Create a new post
-router.post("/users/:userId/posts", postController.createPost);
+router.post("/users/:userId/posts", upload.single('postImage'), postController.createPost);
 
 // Get all posts
 router.get("/users/:userId/posts", postController.getAllPosts);
