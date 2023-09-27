@@ -3,16 +3,13 @@ const User = require("../models/user.model");
 // Follow a user
 exports.followUser = async (req, res) => {
   const { userId } = req.params;
-  const { followerId } = req.body;
+  const { followerId } = req.params;
 
   try {
     // Find the user to follow
     const userToFollow = await User.findById(userId).exec();
-
-    // Find the follower user
     const followerUser = await User.findById(followerId).exec();
 
-    // Check if both user exists
     if (!userToFollow || !followerUser) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -31,7 +28,7 @@ exports.followUser = async (req, res) => {
 
     res.status(201).json({ message: "User followed successfully" });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -39,7 +36,7 @@ exports.followUser = async (req, res) => {
 // Unfollow a user
 exports.unfollowUser = async (req, res) => {
   const { userId } = req.params;
-  const { followerId } = req.body;
+  const { followerId } = req.params;
 
   try {
     // Find the user to unfollow
@@ -63,7 +60,7 @@ exports.unfollowUser = async (req, res) => {
 
     res.status(200).json({ message: "User unfollowed successfully" });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
