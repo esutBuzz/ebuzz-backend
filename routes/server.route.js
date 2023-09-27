@@ -5,6 +5,7 @@ const postRoute = require("./post.route");
 const authRoute = require("./auth.route");
 const likesRoute = require('./likes.route');
 const eventRoute = require("./event.route")
+const followRoute = require("./follow.route");
 // const greeting = require("../utils/greeting")rs
 
 
@@ -15,6 +16,7 @@ route
     .use("/", postRoute)
     .use("/", likesRoute)
     .use("/", eventRoute)
+    .use("/", followRoute)
 //   .get("/", (req, res) => {
 //     res.send(greeting);
 //   })

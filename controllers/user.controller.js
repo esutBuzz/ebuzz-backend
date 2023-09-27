@@ -131,7 +131,7 @@ exports.fetchSingleUserById = (req, res) => {
 exports.fetchAllUsers = async (req, res) => {
   try {
     const user = await User.find({ deleted: false }).select(
-      "_id avatar imgTag username email"
+      "_id avatar imgTag username email events followers following"
     );
     res.status(200).json(user);
   } catch (error) {
