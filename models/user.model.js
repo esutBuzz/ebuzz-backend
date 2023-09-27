@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
         ref: 'Event',
       },
     ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     timestamps: true,

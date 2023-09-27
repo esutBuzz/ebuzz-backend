@@ -1,9 +1,11 @@
-const express = require("express")
+const express = require("express");
 const router = express.Router();
-const followController = require("../controllers/follower.controller");
+const userController = require("../controllers/userController");
 
-router.post('/follow', followController.followUser)
+// Follow a user
+router.post("/users/:userId/follow", userController.followUser);
 
-router.post('/unfollow', followController.unfollowUser)
+// Unfollow a user
+router.post("/users/:userId/unfollow", userController.unfollowUser);
 
 module.exports = router;
