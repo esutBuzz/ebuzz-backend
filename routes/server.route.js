@@ -7,6 +7,7 @@ const likesRoute = require('./likes.route');
 const eventRoute = require("./event.route")
 const followRoute = require("./follow.route");
 const communityRoute = require("./community.route");
+const feedRoute = require("./feed.route")
 // const greeting = require("../utils/greeting")rs
 
 
@@ -19,6 +20,7 @@ route
     .use("/", eventRoute)
     .use("/", followRoute)
     .use("/", communityRoute)
+    .use("/", feedRoute)
 //   .get("/", (req, res) => {
 //     res.send(greeting);
 //   })

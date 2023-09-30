@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
       min: 1,
-      max: 280,
+      max: 500,
     },
     files: {type: Schema.Types.Mixed},
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
