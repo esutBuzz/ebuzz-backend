@@ -12,6 +12,7 @@ exports.getFeed = async (req, res) => {
 
     // Include the user's own posts in the feed
     userConnections.push(userId);
+    console.log("User Connections:", userConnections);
 
     // Find posts from the user's connections and the user
     const feedPosts = await Post.find({ author: { $in: userConnections } })
@@ -19,8 +20,9 @@ exports.getFeed = async (req, res) => {
       .populate({ path: "author", select: "username" }) // Populate author info
 
     res.status(200).json(feedPosts);
+    console.log("Feed Posts:", feedPosts);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
