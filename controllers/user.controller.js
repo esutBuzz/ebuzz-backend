@@ -2,7 +2,22 @@ const mongoose = require("mongoose");
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const generateRandomAvatar = require("../utils/avatar");
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail", // e.g., "Gmail", "Outlook", or use your SMTP settings
+  auth: {
+    user: "kingsleycj2020@gmail.com",
+    pass: "Mathematics1",
+  },
+});
+
+// Function to generate a random 4-digit OTP
+function generateOTP() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
+
 
 // create a new user controller
 exports.createUser = (req, res) => {
@@ -12,7 +27,7 @@ exports.createUser = (req, res) => {
     .then((existingUser) => {
       if (existingUser) {
         return res.status(409).json({
-          message: "Email already exists",
+          message: "Email already registered",
         });
       } else {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -32,6 +47,24 @@ exports.createUser = (req, res) => {
             });
             user
               .save()
+                  // Generate a 4-digit OTP code
+              const otpCode = generateOTP()
+                 // Compose the email verification message
+              const mailOptions = {
+                from: "kingsleycj2020@gmail.com",
+                to: user.email,
+                subject: "Email Verification OTP",
+                text: `Your OTP for email verification is: ${otpCode}`,
+              }
+              // Send the email
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                  console.error(error);
+                  return res.status(500).json({ error: "Error sending email" });
+                }
+                console.log("Email sent:", info.response);
+                res.status(201).json({ message: "User registered successfully" });
+              })
               .then((result) => {
                 console.log(result);
                 res.status(201).json({
