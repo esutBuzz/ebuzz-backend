@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     _id: mongoose.Schema.Types.ObjectId,
     avatar: {
-        type: String
+      type: String,
     },
     imgTag: {
-      type: String
+      type: String,
     },
     username: {
       type: String,
@@ -16,9 +17,13 @@ const userSchema = new mongoose.Schema({
     email: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
+    phoneNumber: { type: String },
     password: { type: String, required: true, min: 5 },
+    emailVerificationToken: { type: String },
+    emailVerified: { type: Boolean, default: false },
+    resetPasswordToken: { type: String },
     deleted: {
       type: Boolean,
       default: false,
@@ -26,25 +31,25 @@ const userSchema = new mongoose.Schema({
     events: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
+        ref: "Event",
       },
     ],
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
     communities: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Community',
+        ref: "Community",
       },
     ],
   },
