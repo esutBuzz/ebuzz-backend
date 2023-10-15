@@ -1,4 +1,3 @@
-// @_learnable
 const avatarStyles = [
     "adventurer",
     "adventurer-neutral",
@@ -62,7 +61,6 @@ const avatarStyles = [
   
     return avatarUrl;
   };
-  // @_learnable
   
   module.exports = generateRandomAvatar;
   
