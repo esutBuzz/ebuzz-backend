@@ -4,160 +4,102 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const generateRandomAvatar = require("../utils/avatar");
-
-const transporter = nodemailer.createTransport({
-  service: "Gmail", // e.g., "Gmail", "Outlook", or use your SMTP settings
-  auth: {
-    user: "kingsleycj2020@gmail.com",
-    pass: "Mathematics1",
-  },
-});
+const sendMail = require("../utils/sendmail");
 
 // Function to generate a random 4-digit OTP
 function generateOTP() {
   return Math.floor(1000 + Math.random() * 9000);
 }
 
-
 // create a new user controller
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
   const avatarUrl = generateRandomAvatar(req.body.email);
-  User.findOne({ email: req.body.email })
-    .exec()
-    .then((existingUser) => {
-      if (existingUser) {
-        return res.status(409).json({
-          message: "Email already registered",
-        });
-      } else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(500).json({
-              error: err,
-            });
-          } else {
-            const imgTag = `<img src="${avatarUrl}" alt="${req.body.email}\'s avatar">`;
-            const user = new User({
-              _id: new mongoose.Types.ObjectId(),
-              avatar: generateRandomAvatar(req.body.email),
-              imgTag: imgTag,
-              username: req.body.username,
-              email: req.body.email,
-              password: hash,
-            });
-            user
-              .save()
-                  // Generate a 4-digit OTP code
-              const otpCode = generateOTP()
-                 // Compose the email verification message
-              const mailOptions = {
-                from: "kingsleycj2020@gmail.com",
-                to: user.email,
-                subject: "Email Verification OTP",
-                text: `Your OTP for email verification is: ${otpCode}`,
-              }
-              // Send the email
-              transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                  console.error(error);
-                  return res.status(500).json({ error: "Error sending email" });
-                }
-                console.log("Email sent:", info.response);
-                res.status(201).json({ message: "User registered successfully" });
-              })
-              .then((result) => {
-                console.log(result);
-                res.status(201).json({
-                  message: "User Created",
-                });
-              })
-              .catch((err) => {
-                console.log(err);
-                res.status(500).json({
-                  error: err,
-                });
-              });
-          }
-        });
-      }
-    });
+
+  const IsUser = await User.findOne({ email: req.body.email });
+  if (IsUser) {
+    return res.status(409).send({ message: "Email already exists" });
+  }
+
+  const imgTag = `<img src="${avatarUrl}" alt="${req.body.email}\'s avatar">`;
+
+  const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+
+  const newUser = new User({
+    ...req.body,
+    _id: new mongoose.Types.ObjectId(),
+    imgTag,
+    password: encryptedPassword,
+  });
+  await newUser.save();
+  req.session.cookie.maxAge = 1 * 24 * 60 * 60; // logs out user after 1 day
+  req.session.user = newUser;
+  req.session.isLoggedIn = true;
+  req.session.cookie.expires = false;
+  const mailMsg = sendMail(req.body.email);
+  console.log(mailMsg);
+  return res
+    .status(200)
+    .send({ message: "User created successfully! ", user: newUser });
 };
 
 // user login controller
-exports.userLogin = (req, res) => {
-  User.findOne({ email: req.body.email })
-    .exec()
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({
-          message: "Authentication Failed",
-        });
-      }
-      bcrypt.compare(req.body.password, user.password, (err, result) => {
-        if (err) {
-          return res.status(401).json({
-            message: "Authentication Failed",
-          });
-        }
-        if (result) {
-          const token = jwt.sign(
-            {
-              userId: user._id,
-            },
-            process.env.JWT_KEY,
-            {
-              expiresIn: "10h",
-            }
-          );
-          return res.status(200).json({
-            message: "Authentication Successful",
-            token: token,
-            userDetails: user,
-          });
-        }
-        return res.status(401).json({
-          message: "Authentication Failed",
-        });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
-    });
+exports.userLogin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    const isPassword = await bcrypt.compare(password, user.password);
+    if (user.email && isPassword) {
+      req.session.cookie.maxAge = 1 * 24 * 60 * 60; // logs out user after 1 day
+      req.session.user = user;
+      req.session.isLoggedIn = true;
+      req.session.cookie.expires = false;
+      return res.status(201).send({ user, message: "Login Successful" });
+    }
+  }
+  return res.status(500).send({ error: "Invalid Credentials" });
 };
 
 // fetch single user controller
-exports.fetchSingleUserById = (req, res) => {
-  User.findOne({ _id: req.params.userId, deleted: false })
-    .exec()
-    .then((doc) => {
-      console.log("From database:", doc);
-      if (doc) {
-        const imgTag = `<img src="${doc.avatar}" alt="${doc.email}\'s avatar">`;
-        res.status(200).json({
-          message: "User fetched successfully",
-          fetchedUser: {
-            _id: req.params.userId,
-            imgTag: imgTag,
-            avatar: doc.avatar,
-            username: doc.username,
-            email: doc.email,
-          },
-        });
-      } else {
-        res
-          .status(401)
-          .json({ message: "No valid entry found for provided ID" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res
-        .status(500)
-        .json({ message: "Error occurred while fetching user", error: err });
-    });
+exports.fetchSingleUserById = async (req, res) => {
+  //   User.findOne({ _id: req.params.userId, deleted: false })
+  //     .exec()
+  //     .then((doc) => {
+  //       console.log("From database:", doc);
+  //       if (doc) {
+  //         const imgTag = `<img src="${doc.avatar}" alt="${doc.email}\'s avatar">`;
+  //         res.status(200).json({
+  //           message: "User fetched successfully",
+  //           fetchedUser: {
+  //             _id: req.params.userId,
+  //             imgTag: imgTag,
+  //             avatar: doc.avatar,
+  //             username: doc.username,
+  //             email: doc.email,
+  //           },
+  //         });
+  //       } else {
+  //         res
+  //           .status(401)
+  //           .json({ message: "No valid entry found for provided ID" });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res
+  //         .status(500)
+  //         .json({ message: "Error occurred while fetching user", error: err });
+  //     });
+  try {
+    const user = await User.findById(req.params.userId);
+    if (user) {
+      return res
+        .status(200)
+        .send({ message: "User fetched successfully", user });
+    }
+    return res.status(401).send({ message: "User does not exist" });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
 };
 
 // fetch all users controller
@@ -192,7 +134,7 @@ exports.deleteUser = (req, res) => {
         error: err,
       });
     });
-    res.status(401).json({ message: "No valid entry found for provided ID" });
+  res.status(401).json({ message: "No valid entry found for provided ID" });
 };
 
 // edit User controller

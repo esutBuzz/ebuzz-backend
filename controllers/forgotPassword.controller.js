@@ -1,15 +1,7 @@
 const User = require("../models/user.model");
-const crypto = require("crypto");
-const nodemailer = require("nodemailer");
-
-// Create a transporter for sending email (you can configure it based on your email provider)
-const transporter = nodemailer.createTransport({
-  service: "Gmail", // e.g., "Gmail", "Outlook", or use your SMTP settings
-  auth: {
-    user: "kingsleycj2020@gmail.com",
-    pass: "Mathematics1",
-  },
-});
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const sendMail = require("../utils/sendmail");
 
 // Function to generate a random 4-digit OTP
 function generateOTP() {
@@ -18,36 +10,66 @@ function generateOTP() {
 
 exports.forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
-
+    const { email, username } = req.body;
+    console.log(req.body);
     // Find the user by email
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Generate a 4-digit OTP code
-    const otpCode = generateOTP();
-
-    // Compose the password reset email message
-    const mailOptions = {
-      from: "kingsleycj2020@gmail.com",
-      to: user.email,
-      subject: "Password Reset OTP",
-      text: `Your OTP for password reset is: ${otpCode}`,
-    };
-
-    // Send the email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Error sending email" });
+    if (user) {
+      if (user.username == username) {
+        const otpCode = generateOTP();
+        const token = await jwt.sign({ otpCode }, process.env.JWT_KEY, {
+          expiresIn: "2m",
+        });
+        req.session.otpCode = token;
+        req.session.user = user;
+        sendMail(email, `Your OTP Code is ${otpCode}, it expires in 2 mins`);
+        return res.status(200).send({ message: "OTP code has been sent" });
       }
-      console.log("Email sent:", info.response);
-      res.status(200).json({ message: "Password reset email sent" });
-    });
+      return res.status(500).send({ error: "invalid username" });
+    }
+    return res.status(500).send({ error: "invalid email" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
+  }
+};
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { otpCode } = req.body;
+    const verifyToken = await jwt.verify(
+      req.session.otpCode,
+      process.env.JWT_KEY
+    );
+    if (otpCode == verifyToken.otpCode) {
+      return res
+        .status(200)
+        .send({ redirect: true, message: "optCode verified" });
+    }
+    return res
+      .status(400)
+      .send({ redirect: false, message: "wrong or expired OTP" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { newPassword, confirmPassword } = req.body;
+    if (newPassword !== confirmPassword) {
+      return res.send({ error: "Passwords do not match" });
+    }
+    const userId = req.session.user._id;
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+    const isUpdated = await User.findByIdAndUpdate(userId, {
+      password: encryptedPassword,
+    });
+    if (isUpdated) {
+      return res.status(200).send({ message: "Password updated successfully" });
+    } else {
+      return res.status(500).send({ error: "Failed to update password" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
