@@ -4,10 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     _id: mongoose.Schema.Types.ObjectId,
     avatar: {
-        type: String
+      type: String,
     },
     imgTag: {
-      type: String
+      type: String,
     },
     username: {
       type: String,
@@ -17,13 +17,38 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
+    phoneNumber: { type: String },
     password: { type: String, required: true, min: 5 },
     deleted: {
       type: Boolean,
       default: false,
     },
+    events: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    communities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Community",
+      },
+    ],
   },
   {
     timestamps: true,

@@ -2,24 +2,34 @@
 
 ## Introduction
 
-eBuzz is a social media app that allows you to post anything (text, images, video, and/or audio) on a single post-it. A buzz is a single post on the eBuzz app, just like a tweet. Other users can reply to a buzz. Replying to a buzz is like adding a comment to a post (eBuzz). Although currently, this app will only accept texts as replies.
+eBuzz is a dedicated social media platform designed exclusively for `ESUT`. eBuzz aims to provide students, faculty, school management, and staff with a unified virtual space to share ideas, broadcast information or news, collaborate on projects, and participate in academic discussions. Key features of eBuzz will include personalized profiles, academic group creation, event planning, real-time posting, and multimedia sharing. Additionally, an intelligent recommendation system will be integrated to suggest relevant academic content and foster serendipitous connections between members. Security and privacy will be prioritized, ensuring compliance with data protection regulations and safeguarding of users’ personal information.
 
-## Project Requirements Satisfied
+## Project Features
 
 - [x] Users can signup and login to their accounts.
 - [x] Users can access all causes as well as create a new cause, edit their created cause and also delete what they've created.
 - [x] A user cannot delete posts and comments made by another user.
-- [x] Soft delete was implemented on all resources; when resources are deleted, its still stored on the database collection but it ceases to be returned if fetched.
-- [x] All Avatar requirements were satisfied.
+- [x] A user cannot effect a cause without logging in first.
+- [x] Unique Avatars were used as default profile images.
 
 ```json
 {
     "message": "User fetched successfully",
-    "fetchedUser": {
-        "imgTag": "<img src=\"https://api.dicebear.com/5.x/bottts/svg?seed=james-g5xm5-gmail-z3orx-com&size=200&radius=50\" alt=\"james's avatar\">",
-        "avatar": "https://api.dicebear.com/5.x/bottts/svg?seed=james-g5xm5-gmail-z3orx-com&size=200&radius=50",
-        "username": "james",
-        "email": "james@gmail.com"
+    "user": {
+        "_id": "652c022f44e2a22923c39c14",
+        "imgTag": "<img src=\"https://api.dicebear.com/5.x/miniavs/svg?seed=primekings-nr4lu-kc-gm4cj-gmail-nr4lu-com&size=200&radius=50\" alt=\"primekings.kc@gmail.com's avatar\">",
+        "username": "primekings",
+        "email": "primekings.kc@gmail.com",
+        "password": "$2b$10$YfSZshP35yD3CHepOoImmOq957jzpCmxarcGH42c6PoHVVlASIvFO",
+        "emailVerified": false,
+        "deleted": false,
+        "events": [],
+        "followers": [],
+        "following": [],
+        "communities": [],
+        "createdAt": "2023-10-15T15:15:59.128Z",
+        "updatedAt": "2023-10-15T15:15:59.128Z",
+        "__v": 0
     }
 }
 ```
@@ -28,11 +38,13 @@ eBuzz is a social media app that allows you to post anything (text, images, vide
 
 - [Entity Relationship Diagram Link](https://dbdesigner.page.link/14Twuq7fN25yGjNP6)
 
-- [API Documentation](https://justpostit-2v8i.onrender.com/api/v1/docs)
+- [API Documentation](https://documenter.getpostman.com/view/14719733/2s9YR83Ccx)
+
+- [Live Link](https://ebuzz.onrender.com)
 
 ### Installation Guide
 
-- Clone this repository `https://github.com/kingsleycj/ebuzz-backend`
+- Clone this repository `https://github.com/esutBuzz/ebuzz-backend`
 
 - The `develop` branch is the most stable branch at any given time, ensure you're working from it.
 
@@ -55,7 +67,11 @@ eBuzz is a social media app that allows you to post anything (text, images, vide
 - Mongoose ODM (Object Data Mapper)
 - Dotenv
 - Bcrypt
-- Joi
+- EJS
+- Multer
+- Nodemailer
+- Cookie-parser
+- Connect-mongodb-session
 - Jsonwebtoken
 - Body-parser
 - Nodemon
@@ -69,62 +85,62 @@ A clean architecture was implemented during the process of building this app.
 ```
 ├── controllers
 │   ├── comment.controller.js
+│   ├── comment.controller.js
+│   ├── event.controller.js
+│   ├── feed.controller.js
+│   ├── follower.controller.js
+│   ├── forgotPassword.controller.js
+│   ├── likes.controller.js
 │   ├── post.controller.js
-│   ├── user.controller.js
+│   └── user.controller.js
 ├── middlewares
-│   ├── validator.js
+│   ├── check-auth.js
+│   └── uploadMiddleware.js
 ├── models
 │   ├── comment.model.js
+│   ├── community.model.js
+│   ├── event.model.js
+│   ├── feed.model.js
+│   ├── follower.model.js
 │   ├── post.model.js
-│   ├── user.model.js
+│   └── user.model.js
 ├── routes
 │   ├── auth.route.js
 │   ├── comment.route.js
-│   ├── server.route.js
+│   ├── community.route.js
+│   ├── event.route.js
+│   ├── feed.route.js
+│   ├── follow.route.js
+│   ├── forgotPassword.route.js
+│   ├── likes.route.js
 │   ├── post.route.js
-│   ├── user.route.js
+│   ├── server.route.js
+│   └── user.route.js
 ├── utils
 │   ├── avatar.js
-│   ├── greeting.js
+│   ├── emailPage.html
 │   ├── imgTag.js
+│   └── sendmail.js
 ├── .gitignore
 ├── app.js
 ├── package.json
 └── README.md
 ```
 
-### Explanations
-
-- Soft delete was implemented by setting the `delete` default property of each resources to `false`, and only converting them to `true` after it has been updated through the **DELETE** endpoint.
-
-```js
-{
-    deleted: {
-      type: Boolean,
-      default: false,
-    }
-}
-```
-
-- I used the mongoose method of `.findOneAndUpdate()` on the **DELETE** endpoints to update the `deleted` property on each resource.
-
-```js
-{
-    await Resource.findOneAndUpdate(
-        { _id: req.params.commentId },
-        { deleted: true },
-        { new: true }
-    )
-}
-```
-
-- As previously stated above, the _deleted resources_ are not returned because their properties have been changed to `true`. However, they're still stored on the linked MONGODB database.
 
 ### Avatar API
 
 Dicebear API was used for the generation of avatars.
 
-![avatar image](https://api.dicebear.com/5.x/avataaars/svg?seed=king-g5xm5-gmail-z3orx-com&size=200&radius=50)
+<div style="display: flex;">
+    <div style="flex: 50%;">
+        <img src="https://api.dicebear.com/5.x/avataaars/svg?seed=king-g5xm5-gmail-z3orx-com&size=200&radius=50" alt="Avatar 1">
+    </div>
+    <div style="flex: 50%;">
+        <img src="https://api.dicebear.com/5.x/avataaars/svg?seed=galactic-zodiac-end8o-gmail-t6xjt-com&size=200&radius=50" alt="Avatar 2">
+    </div>
+</div>
+
 
 ### Author
 

@@ -5,11 +5,22 @@ const dotenv = require("dotenv");
 dotenv.config();
 const serverRoute = require("./routes/server.route")
 const cookieParser = require("cookie-parser")
-
+const session = require("express-session")
 const app = express();
-
+const MongoDBStore = require('connect-mongodb-session')(session);
+const store = new MongoDBStore({
+  uri:process.env.MONGO_DB_ATLAS,
+  collection: 'sessions'
+});
+app.use(session({
+  secret:process.env.SESSION_SECRET,
+  saveUninitialized:false,
+  resave:false,
+  store
+}))
 // middleware and packages
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -26,7 +37,7 @@ const connectToMongoDB = () => {
   mongoose.set("strictQuery", true);
   mongoose
     .connect(process.env.MONGO_DB_ATLAS, {
-      dbName: "Post-it-app",
+      dbName: "eBuzz",
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
