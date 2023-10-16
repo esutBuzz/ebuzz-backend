@@ -22,7 +22,7 @@ exports.likePost = async (req, res) => {
 
     res.status(201).json({ message: "Liked successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -50,6 +50,6 @@ exports.unlikePost = async (req, res) => {
 
     res.json({ message: "Unliked successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };

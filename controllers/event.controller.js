@@ -10,7 +10,7 @@ exports.createEvent = async (req, res) => {
     });
   } catch (error) {
     console.log(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -20,7 +20,7 @@ exports.getAllEvents = async (req, res) => {
     res.json(events);
   } catch (error) {
     console.log(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -33,7 +33,7 @@ exports.getEventById = async (req, res) => {
     res.json(event);
   } catch (error) {
     console.log(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -48,7 +48,7 @@ exports.updateEventById = async (req, res) => {
     res.json(event);
   } catch (error) {
     console.log(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -61,6 +61,6 @@ exports.deleteEventById = async (req, res) => {
     res.json({ message: "Event deleted" });
   } catch (error) {
     console.log(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };

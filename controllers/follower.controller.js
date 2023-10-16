@@ -61,7 +61,7 @@ exports.unfollowUser = async (req, res) => {
     res.status(200).json({ message: "User unfollowed successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 

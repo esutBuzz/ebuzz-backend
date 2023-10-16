@@ -43,7 +43,7 @@ exports.getCommentById = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Comment could not be fetched" });
+    res.status(500).json({ error: error.message });
   }
 };
 

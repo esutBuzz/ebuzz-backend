@@ -8,6 +8,7 @@ const sendMail = require("../utils/sendmail");
 
 // create a new user controller
 exports.createUser = async (req, res) => {
+  try {
   const avatarUrl = generateRandomAvatar(req.body.email);
 
   const IsUser = await User.findOne({ email: req.body.email });
@@ -35,38 +36,52 @@ exports.createUser = async (req, res) => {
   return res
     .status(200)
     .send({ message: "User created successfully! ", user: newUser });
-};
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: err.message });
+    }
+  };
 
 // user login controller
 exports.userLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    const isPassword = await bcrypt.compare(password, user.password);
-    if (user.email && isPassword) {
-      req.session.cookie.maxAge = 1 * 24 * 60 * 60; // logs out user after 1 day
-      req.session.user = user;
-      req.session.isLoggedIn = true;
-      req.session.cookie.expires = false;
-      return res.status(201).send({ user, message: "Login Successful" });
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      const isPassword = await bcrypt.compare(password, user.password);
+      if (user.email && isPassword) {
+        req.session.cookie.maxAge = 1 * 24 * 60 * 60; // logs out user after 1 day
+        req.session.user = user;
+        req.session.isLoggedIn = true;
+        req.session.cookie.expires = false;
+        return res.status(201).send({ user, message: "Login Successful" });
+      }
     }
+    return res.status(500).send({ error: "Invalid Credentials" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err.message });
   }
-  return res.status(500).send({ error: "Invalid Credentials" });
 };
 
 // user logout controller
 exports.userLogout = (req, res) => {
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error("Error destroying session:", err);
-        return res.status(500).send({ error: "Logout failed" });
-      }
-      res.clearCookie("connect.sid"); // Clear the session cookie
-      return res.status(200).send({ message: "Logout successful" });
-    });
-  } else {
-    return res.status(200).send({ message: "Already logged out" });
+  try {
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Error destroying session:", err);
+          return res.status(500).send({ error: "Logout failed" });
+        }
+        res.clearCookie("connect.sid"); // Clear the session cookie
+        return res.status(200).send({ message: "Logout successful" });
+      });
+    } else {
+      return res.status(200).send({ message: "Already logged out" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err.message });
   }
 };
 

@@ -23,7 +23,7 @@ exports.joinCommunity = async (req, res) => {
     res.status(201).json({ message: "User joined the community" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -47,7 +47,7 @@ exports.leaveCommunity = async (req, res) => {
     res.status(200).json({ message: "User left the community" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -62,7 +62,7 @@ exports.createCommunity = async (req, res) => {
       .json({ message: "Community created successfully", community });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -87,7 +87,7 @@ exports.updateCommunityById = async (req, res) => {
       .json({ message: "Community updated successfully", community });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -105,6 +105,6 @@ exports.deleteCommunityById = async (req, res) => {
     res.status(200).json({ message: "Community deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
