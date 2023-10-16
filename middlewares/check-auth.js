@@ -1,13 +1,8 @@
-const jwt = require("jsonwebtoken")
+const isAuth = (req, res, next) => {
+    if(req.session.isLoggedIn){
+        return next();
+    }
+    return res.send({error:'User must be logged in to perform this action'})
+}
 
-module.exports = (req, res, next) => {
-    try {
-        const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-        req.userData = decoded;
-        next();
-    } catch (error){
-        res.status(401).json({
-            message: "Auth Failed"
-        })
-    };
-};
+module.exports = isAuth

@@ -50,42 +50,52 @@ exports.getCommentById = async (req, res) => {
 // update a comment by ID
 exports.updateCommentById = async (req, res) => {
   try {
-    const { content } = req.body;
-    const comment = await Comment.findOneAndUpdate(
-      { _id: req.params.commentId },
-      { content },
-      { new: true }
-    );
+    const { author, commentId, content } = req.body;
+    const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: "Comment not found" });
     }
-    res.status(200).json({
-      message: "comment updated successfully",
-      comment: comment,
-    });
+    if (author == comment.author) {
+      const comment = await Comment.findByIdAndUpdate(
+        commentId,
+        { content },
+        { new: true }
+      );
+      return res.status(200).json({
+        message: "comment updated successfully",
+        comment: comment,
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: "You're unauthorized to edit this post" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "An error occurred while updating comment" });
+    res.status(500).json({ error: error.message});
   }
 };
 
 // delete a comment by ID
 exports.deleteCommentById = async (req, res) => {
   try {
-    await Comment.findOneAndUpdate(
-      { _id: req.params.commentId },
-      { deleted: true },
-      { new: true }
-    )
-      .exec()
-      .then((result) => {
-        console.log(result);
-        res.status(200).json({
-          message: "Comment deleted successfully",
-        });
-      });
+    const { userId, commentId } = req.params;
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+    if (userId == comment.author) {
+      const isDeleted = await Comment.findByIdAndDelete(commentId);
+      if (isDeleted) {     
+        return res
+          .status(200)
+          .send({ message: "Comment Deleted Successfully", isDeleted: true });
+      }
+    }
+    return res
+      .status(200)
+      .send({ message: "You're unauthorized to delete this comment" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "An error occurred while deleting comment" });
+    res.status(500).json({ error: error.message });
   }
 };

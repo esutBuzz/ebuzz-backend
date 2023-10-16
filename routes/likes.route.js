@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const likeController = require("../controllers/likes.controller")
+const isAuth = require("../middlewares/check-auth")
 
 
 // Route to create a like
-router.post('/users/:userId/posts/:postId/likePost', likeController.likePost);
+router.post('/users/:userId/posts/:postId/likePost', isAuth, likeController.likePost);
 
 // Route to remove a like
-router.post('/users/:userId/posts/:postId/unlikePost', likeController.unlikePost);
+router.post('/users/:userId/posts/:postId/unlikePost', isAuth,  likeController.unlikePost);
 
 // // Route to create a like on an event
 // router.post('/users/:userId/events/:eventsId/likeEvent', likeController.likePost);
