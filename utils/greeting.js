@@ -1,4 +1,4 @@
-const greeting = `<!DOCTYPE html>
+const greeting = `
 <html lang="en">
   <head>
     <style>

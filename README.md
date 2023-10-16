@@ -1,5 +1,7 @@
-<h1 align="center">eBuzz</h1>
 
+<p align="center">
+    <img title="eBuzz" height="100" src="https://i.ibb.co/8dthJqh/Screenshot-2023-10-16-at-11-07-35-PM.png" width="50%"/>
+</p>
 ## Introduction
 
 eBuzz is a dedicated social media platform designed exclusively for `ESUT`. eBuzz aims to provide students, faculty, school management, and staff with a unified virtual space to share ideas, broadcast information or news, collaborate on projects, and participate in academic discussions. Key features of eBuzz will include personalized profiles, academic group creation, event planning, real-time posting, and multimedia sharing. Additionally, an intelligent recommendation system will be integrated to suggest relevant academic content and foster serendipitous connections between members. Security and privacy will be prioritized, ensuring compliance with data protection regulations and safeguarding of users’ personal information.
