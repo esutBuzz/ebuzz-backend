@@ -23,6 +23,7 @@ exports.createUser = async (req, res) => {
   const newUser = new User({
     ...req.body,
     _id: new mongoose.Types.ObjectId(),
+    avatar: generateRandomAvatar(req.body.email),
     imgTag,
     password: encryptedPassword,
   });
