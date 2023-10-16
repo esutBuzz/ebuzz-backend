@@ -64,3 +64,19 @@ exports.unfollowUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// Get all followers
+exports.getFollowers = async (req, res) => {
+  const userId = req.session.user._id
+  const user = await User.findById(userId)
+  const followers = user.followers
+
+  const existingFollowers = await Promise.all(followers.map( async (follower) => {
+     if( await User.findById(follower) == null){
+       await User.updateOne({_id:userId}, {$pull:{followers:follower}})
+     }
+     return follower
+  }))
+  const myFollowers = await User.find({_id:{$in:existingFollowers}})
+  return res.status(200).send({followers:myFollowers})
+}

@@ -14,7 +14,7 @@ const postSchema = new mongoose.Schema(
       min: 1,
       max: 500,
     },
-    files: {type: Schema.Types.Mixed},
+    files:[],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     deleted: {
       type: Boolean,
