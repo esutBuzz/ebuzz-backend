@@ -23,7 +23,10 @@ route
     .use("/", communityRoute)
     .use("/", feedRoute)
     .use("/", forgotPassword)
-    .get("/", (res) => {res.send(greeting)})
+    .get("/", (req, res) => {
+        res.send(greeting);
+      })
+    
 //   .get("/docs", (req, res) => res.redirect(process.env.API_DOCS_URL));
 
 module.exports = route;
