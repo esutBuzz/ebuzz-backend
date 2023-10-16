@@ -8,7 +8,7 @@ exports.createComment = async (req, res) => {
     await comment.save();
     res.status(201).json({
       message: "comment created successfully",
-      comment: comment
+      comment: comment,
     });
   } catch (error) {
     console.log(error);

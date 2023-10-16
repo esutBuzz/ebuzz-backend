@@ -21,9 +21,6 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: { type: String },
     password: { type: String, required: true, min: 5 },
-    emailVerificationToken: { type: String },
-    emailVerified: { type: Boolean, default: false },
-    resetPasswordToken: { type: String },
     deleted: {
       type: Boolean,
       default: false,

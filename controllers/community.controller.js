@@ -57,7 +57,9 @@ exports.createCommunity = async (req, res) => {
 
   try {
     const community = await Community.create({ name, description });
-    res.status(201).json({ message: "Community created successfully", community });
+    res
+      .status(201)
+      .json({ message: "Community created successfully", community });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -80,7 +82,9 @@ exports.updateCommunityById = async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    res.status(200).json({ message: "Community updated successfully", community });
+    res
+      .status(200)
+      .json({ message: "Community updated successfully", community });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
