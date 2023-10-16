@@ -17,7 +17,7 @@ exports.getFeed = async (req, res) => {
     // Find posts from the user's connections and the user
     const feedPosts = await Post.find({ author: { $in: userConnections } })
       .sort({ createdAt: -1 }) // Sort by most recent posts first
-      .populate({ path: "author", select: "username" }) // Populate author info
+      .populate({ path: "author", select: "username" }); // Populate author info
 
     res.status(200).json(feedPosts);
     console.log("Feed Posts:", feedPosts);

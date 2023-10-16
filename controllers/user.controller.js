@@ -6,7 +6,6 @@ const nodemailer = require("nodemailer");
 const generateRandomAvatar = require("../utils/avatar");
 const sendMail = require("../utils/sendmail");
 
-
 // create a new user controller
 exports.createUser = async (req, res) => {
   const avatarUrl = generateRandomAvatar(req.body.email);
@@ -60,14 +59,14 @@ exports.userLogout = (req, res) => {
   if (req.session) {
     req.session.destroy((err) => {
       if (err) {
-        console.error('Error destroying session:', err);
-        return res.status(500).send({ error: 'Logout failed' });
+        console.error("Error destroying session:", err);
+        return res.status(500).send({ error: "Logout failed" });
       }
-      res.clearCookie('connect.sid'); // Clear the session cookie
-      return res.status(200).send({ message: 'Logout successful' });
+      res.clearCookie("connect.sid"); // Clear the session cookie
+      return res.status(200).send({ message: "Logout successful" });
     });
   } else {
-    return res.status(200).send({ message: 'Already logged out' });
+    return res.status(200).send({ message: "Already logged out" });
   }
 };
 
@@ -89,7 +88,7 @@ exports.fetchSingleUserById = async (req, res) => {
 // fetch all users controller
 exports.fetchAllUsers = async (req, res) => {
   try {
-    const user = await User.find({ deleted: false })
+    const user = await User.find({ deleted: false });
     res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -162,7 +161,7 @@ exports.fetchUserUsingHandle = (req, res) => {
             email: doc.email,
             followers: doc.followers,
             following: doc.following,
-            communities: doc.communities
+            communities: doc.communities,
           },
         });
       } else {
