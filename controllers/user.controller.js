@@ -6,10 +6,6 @@ const nodemailer = require("nodemailer");
 const generateRandomAvatar = require("../utils/avatar");
 const sendMail = require("../utils/sendmail");
 
-// Function to generate a random 4-digit OTP
-function generateOTP() {
-  return Math.floor(1000 + Math.random() * 9000);
-}
 
 // create a new user controller
 exports.createUser = async (req, res) => {
@@ -59,36 +55,24 @@ exports.userLogin = async (req, res) => {
   return res.status(500).send({ error: "Invalid Credentials" });
 };
 
+// user logout controller
+exports.userLogout = (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res.status(500).send({ error: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid'); // Clear the session cookie
+      return res.status(200).send({ message: 'Logout successful' });
+    });
+  } else {
+    return res.status(200).send({ message: 'Already logged out' });
+  }
+};
+
 // fetch single user controller
 exports.fetchSingleUserById = async (req, res) => {
-  //   User.findOne({ _id: req.params.userId, deleted: false })
-  //     .exec()
-  //     .then((doc) => {
-  //       console.log("From database:", doc);
-  //       if (doc) {
-  //         const imgTag = `<img src="${doc.avatar}" alt="${doc.email}\'s avatar">`;
-  //         res.status(200).json({
-  //           message: "User fetched successfully",
-  //           fetchedUser: {
-  //             _id: req.params.userId,
-  //             imgTag: imgTag,
-  //             avatar: doc.avatar,
-  //             username: doc.username,
-  //             email: doc.email,
-  //           },
-  //         });
-  //       } else {
-  //         res
-  //           .status(401)
-  //           .json({ message: "No valid entry found for provided ID" });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res
-  //         .status(500)
-  //         .json({ message: "Error occurred while fetching user", error: err });
-  //     });
   try {
     const user = await User.findById(req.params.userId);
     if (user) {
@@ -105,9 +89,7 @@ exports.fetchSingleUserById = async (req, res) => {
 // fetch all users controller
 exports.fetchAllUsers = async (req, res) => {
   try {
-    const user = await User.find({ deleted: false }).select(
-      "_id avatar imgTag username email events followers following"
-    );
+    const user = await User.find({ deleted: false })
     res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -173,11 +155,14 @@ exports.fetchUserUsingHandle = (req, res) => {
         res.status(200).json({
           message: "User fetched successfully",
           fetchedUser: {
-            _id: req.params.userId,
-            imgTag: imgTag,
+            _id: doc._id,
+            imgTag: doc.imgTag,
             avatar: doc.avatar,
             username: doc.username,
             email: doc.email,
+            followers: doc.followers,
+            following: doc.following,
+            communities: doc.communities
           },
         });
       } else {

@@ -23,6 +23,6 @@ exports.getFeed = async (req, res) => {
     console.log("Feed Posts:", feedPosts);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).send({ error: error.message });
   }
 };
