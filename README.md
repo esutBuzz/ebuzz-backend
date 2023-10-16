@@ -119,6 +119,7 @@ A clean architecture was implemented during the process of building this app.
 ├── utils
 │   ├── avatar.js
 │   ├── emailPage.html
+│   ├── greeting.js
 │   ├── imgTag.js
 │   └── sendmail.js
 ├── .gitignore

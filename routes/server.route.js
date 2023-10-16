@@ -9,7 +9,7 @@ const followRoute = require("./follow.route");
 const communityRoute = require("./community.route");
 const feedRoute = require("./feed.route")
 const forgotPassword = require("./forgotPassword.route")
-// const greeting = require("../utils/greeting")rs
+const greeting = require("../utils/greeting.js")
 
 
 // Calling all routes
@@ -23,9 +23,7 @@ route
     .use("/", communityRoute)
     .use("/", feedRoute)
     .use("/", forgotPassword)
-//   .get("/", (req, res) => {
-//     res.send(greeting);
-//   })
+    .get("/", (res) => {res.send(greeting)})
 //   .get("/docs", (req, res) => res.redirect(process.env.API_DOCS_URL));
 
 module.exports = route;
