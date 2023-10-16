@@ -9,6 +9,9 @@ router.post("/signup", userController.createUser);
 // User login and jwt validation
 router.post("/login", userController.userLogin);
 
+// The logout route
+router.get('/logout', userController.userLogout);
+
 // fetch all users
 router.get("/", userController.fetchAllUsers)
 

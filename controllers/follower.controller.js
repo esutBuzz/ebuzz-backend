@@ -29,7 +29,7 @@ exports.followUser = async (req, res) => {
     res.status(201).json({ message: "User followed successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).send({ error: error.message });
   }
 };
 
