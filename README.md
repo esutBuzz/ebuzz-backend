@@ -42,7 +42,7 @@ eBuzz is a dedicated social media platform designed exclusively for `ESUT`. eBuz
 
 - [API Documentation](https://documenter.getpostman.com/view/14719733/2s9YR83Ccx)
 
-- [Live Link](https://ebuzz.onrender.com)
+- [Live Link](https://ebuzz.onrender.com/api/v1)
 
 ### Installation Guide
 
