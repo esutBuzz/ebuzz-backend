@@ -47,7 +47,7 @@ const avatarStyles = [
     const replaceAt = `-${entropySource()}-`;
     const replaceDot = `-${entropySource()}-`;
   
-    const seed = _email.replace("@", replaceAt).replaceAll(".", replaceDot);
+    const seed = _email.replace("@", replaceAt).replace(".", replaceDot);
   
     const randomAvatarStyle = getRandomAvatarStyle();
   
