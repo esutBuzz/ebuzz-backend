@@ -8,16 +8,19 @@ const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const app = express();
 const MongoDBStore = require('connect-mongodb-session')(session);
+
 const store = new MongoDBStore({
   uri:process.env.MONGO_DB_ATLAS,
   collection: 'sessions'
 });
+
 app.use(session({
   secret:process.env.SESSION_SECRET,
   saveUninitialized:false,
   resave:false,
   store
 }))
+
 // middleware and packages
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
@@ -75,6 +78,3 @@ app.use((req, res, err) => {
 app.listen(port, () => {
   console.log(`listening on http://localhost:${port}`);
 });
-
-// const nigeriaPhoneRegex = /^(08|07|09)\d{9}$/;
-// console.log(nigeriaPhoneRegex.test("08145424408"))
