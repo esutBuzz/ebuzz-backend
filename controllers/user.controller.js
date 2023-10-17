@@ -32,8 +32,8 @@ exports.createUser = async (req, res) => {
   req.session.user = newUser;
   req.session.isLoggedIn = true;
   req.session.cookie.expires = false;
-  const mailMsg = sendMail(req.body.email);
-  console.log(mailMsg);
+  // const mailMsg = sendMail(req.body.email);
+  // console.log(mailMsg);
   return res
     .status(200)
     .send({ message: "User created successfully! ", user: newUser });
