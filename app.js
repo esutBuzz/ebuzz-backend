@@ -75,3 +75,6 @@ app.use((req, res, err) => {
 app.listen(port, () => {
   console.log(`listening on http://localhost:${port}`);
 });
+
+// const nigeriaPhoneRegex = /^(08|07|09)\d{9}$/;
+// console.log(nigeriaPhoneRegex.test("08145424408"))

@@ -32,11 +32,10 @@ exports.createUser = async (req, res) => {
   req.session.user = newUser;
   req.session.isLoggedIn = true;
   req.session.cookie.expires = false;
-  // const mailMsg = sendMail(req.body.email);
-  // console.log(mailMsg);
+  
   return res
     .status(200)
-    .send({ message: "User created successfully! ", user: newUser });
+    .send({ message: "User created successfully! ", user:newUser });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: err.message });

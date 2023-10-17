@@ -3,9 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
     _id: mongoose.Schema.Types.ObjectId,
-    avatar: {
-      type: String,
-    },
+    avatar: String,
     imgTag: {
       type: String,
     },
@@ -20,7 +18,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     phoneNumber: { type: String },
-    password: { type: String, required: true, min: 5 },
+    password: { type: String, required: true },
     deleted: {
       type: Boolean,
       default: false,

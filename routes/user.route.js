@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user.controller");
-// const validateSignUp = require("../middlewares/validator")
+const validateCredentials = require("../middlewares/validateUser")
 
 // create a new user
-router.post("/signup", userController.createUser);
+router.post("/signup", validateCredentials, userController.createUser);
 
 // User login and jwt validation
 router.post("/login", userController.userLogin);
