@@ -15,9 +15,9 @@ exports.joinCommunity = async (req, res) => {
     }
 
     // Check if the user is already a member of the community
-    if (!user.communities.includes(communityId)) {
-      user.communities.push(communityId);
-      await user.save();
+    if (!community.members.includes(user._id)) {
+      community.members.push(user._id);
+      await community.save();
     }
 
     res.status(201).json({ message: "User joined the community" });
@@ -41,8 +41,11 @@ exports.leaveCommunity = async (req, res) => {
     }
 
     // Remove the user from the community's members
-    user.communities.pull(communityId);
-    await user.save();
+    const index = community.members.indexOf(user._id);
+    if (index > -1) {
+      community.members.splice(index, 1);
+      await community.save();
+    }
 
     res.status(200).json({ message: "User left the community" });
   } catch (error) {
@@ -50,6 +53,7 @@ exports.leaveCommunity = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Create a new community
 exports.createCommunity = async (req, res) => {
