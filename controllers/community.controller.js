@@ -108,3 +108,23 @@ exports.deleteCommunityById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getCommunityMembers = async (req, res) => {
+  const { communityId } = req.params;
+
+  try {
+    const community = await Community.findById(communityId).exec();
+
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+
+    // Fetch the members of the community using the community's member IDs
+    const members = await User.find({ _id: { $in: community.members } }).exec();
+
+    res.status(200).json({ members });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};

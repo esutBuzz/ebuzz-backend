@@ -18,4 +18,7 @@ router.put("/communities/:communityId", isAuth, communityController.updateCommun
 // Delete a community by ID
 router.delete("/communities/:communityId", isAuth, communityController.deleteCommunityById);
 
+// Define the route to fetch all members of a community
+router.get('/communities/:communityId/members', isAuth, communityController.getCommunityMembers);
+
 module.exports = router;
