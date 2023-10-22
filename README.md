@@ -38,8 +38,6 @@ eBuzz is a dedicated social media platform designed exclusively for `ESUT`. eBuz
 
 ### Links
 
-- [Entity Relationship Diagram Link](https://dbdesigner.page.link/14Twuq7fN25yGjNP6)
-
 - [API Documentation](https://documenter.getpostman.com/view/14719733/2s9YR83Ccx)
 
 - [Live Link](https://ebuzz.onrender.com/api/v1)
@@ -85,6 +83,8 @@ A clean architecture was implemented during the process of building this app.
 ### Folder Structure
 
 ```
+├── .vscode
+│   └── settings.json
 ├── controllers
 │   ├── comment.controller.js
 │   ├── comment.controller.js
@@ -97,7 +97,8 @@ A clean architecture was implemented during the process of building this app.
 │   └── user.controller.js
 ├── middlewares
 │   ├── check-auth.js
-│   └── uploadMiddleware.js
+│   ├── uploadMiddleware.js
+│   └── validateUser.js
 ├── models
 │   ├── comment.model.js
 │   ├── community.model.js
@@ -123,7 +124,8 @@ A clean architecture was implemented during the process of building this app.
 │   ├── emailPage.html
 │   ├── greeting.js
 │   ├── imgTag.js
-│   └── sendmail.js
+│   ├── sendmail.js
+│   └── validate.js
 ├── .gitignore
 ├── app.js
 ├── package.json
