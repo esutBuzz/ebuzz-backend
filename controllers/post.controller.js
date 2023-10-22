@@ -114,7 +114,7 @@ exports.deletePostById = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
-    if (userId == post.userId) {
+    if (userId == post.author) {
       const isDeleted = await Post.findByIdAndDelete(postId);
       if (isDeleted) {
         return res
