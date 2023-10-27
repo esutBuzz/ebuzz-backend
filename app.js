@@ -32,14 +32,24 @@ app.use(cookieParser());
 
 // endpoints promise
 mongoose.Promise = global.Promise;
+// Middleware to handle CORS headers for all routes
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content, Accept, Authorization");
-  res.header("Access-Control-Allow-Methods", "PUT, POST, DELETE, GET");
+  // Allow requests from any origin
+  res.header('Access-Control-Allow-Origin', '*');
 
-  next();
+  // Allow specific headers and methods
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+  // Check if it's a preflight request
+  if (req.method === 'OPTIONS') {
+    // Respond with 200 status code
+    res.sendStatus(200);
+  } else {
+    // Continue to the next middleware
+    next();
+  }
 });
-
 
 // Routing
 app.use("/api/v1", serverRoute);
