@@ -40,7 +40,7 @@ class Validate {
   }
 
   isPhoneNumber() {
-    const nigeriaPhoneRegex = /^(08|07|09)\d{9}$/;
+    const nigeriaPhoneRegex = /^(?:(\+234)|0)[789]\d{9}$/;
     if (nigeriaPhoneRegex.test(this.phoneNumber)) {
       this.messages.push(true);
       return;
@@ -50,3 +50,6 @@ class Validate {
 }
 
 module.exports = Validate;
+
+
+// /^(08|07|09)\d{9}$/
