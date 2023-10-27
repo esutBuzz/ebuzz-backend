@@ -1,9 +1,9 @@
 class Validate {
-  constructor(username, email, password) {
+  constructor(username, email, password, phoneNumber) {
     this.username = username;
     (this.email = email),
       (this.password = password),
-    //   (this.phoneNumber = phoneNumber),
+      (this.phoneNumber = phoneNumber),
       (this.messages = []);
   }
   isEmail() {
@@ -39,14 +39,14 @@ class Validate {
     );
   }
 
-//   isPhoneNumber() {
-//     const nigeriaPhoneRegex = /^(?:(\+234)|0)[789]\d{9}$/;
-//     if (nigeriaPhoneRegex.test(this.phoneNumber)) {
-//       this.messages.push(true);
-//       return;
-//     }
-//     this.messages.push("Invalid phone number");
-//   }
+  isPhoneNumber() {
+    const nigeriaPhoneRegex = /^(?:(\+234)|0)[789]\d{9}$/;
+    if (nigeriaPhoneRegex.test(this.phoneNumber)) {
+      this.messages.push(true);
+      return;
+    }
+    this.messages.push("Invalid phone number");
+  }
 }
 
 module.exports = Validate;
