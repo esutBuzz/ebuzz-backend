@@ -5,8 +5,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 const serverRoute = require("./routes/server.route")
 const cookieParser = require("cookie-parser")
+const cors = require("cors");
 const session = require("express-session")
 const app = express();
+app.use(cors());
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const store = new MongoDBStore({
