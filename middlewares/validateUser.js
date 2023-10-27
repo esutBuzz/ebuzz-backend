@@ -1,14 +1,14 @@
 const ValidateUser = require("../utils/validate");
 
 const validateCredentials = (req, res, next) => {
-  const { username, email, password, phoneNumber } = req.body;
+  const { username, email, password } = req.body;
 
-  const user = new ValidateUser(username, email, password, phoneNumber);
+  const user = new ValidateUser(username, email, password);
 
   user.isEmail();
   user.isPassword();
   user.isUsername();
-  user.isPhoneNumber();
+//   user.isPhoneNumber();
 
   let msg = undefined;
   for (const str of user.messages) {
