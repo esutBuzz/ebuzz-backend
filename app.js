@@ -11,8 +11,8 @@ const app = express();
 app.use(cors());
 const MongoDBStore = require('connect-mongodb-session')(session);
 
-// Enable trust proxy to handle X-Forwarded-For header
-app.set('trust proxy', true);
+// Set trust proxy to a specific IP, IP range, or loopback
+app.set('trust proxy', 'loopback');
 const store = new MongoDBStore({
   uri:process.env.MONGO_DB_ATLAS,
   collection: 'sessions'
