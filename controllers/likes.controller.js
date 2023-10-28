@@ -28,7 +28,7 @@ exports.likePost = async (req, res) => {
 
 // Route to unlike a post
 exports.unlikePost = async (req, res) => {
-  const { postId, userId } = req.body;
+  const { postId, userId } = req.params;
 
   try {
     // Find the post
