@@ -54,7 +54,12 @@ exports.userLogin = async (req, res) => {
         req.session.user = user;
         req.session.isLoggedIn = true;
         req.session.cookie.expires = false;
-        return res.status(201).send({ user, message: "Login Successful" });
+        const token = jwt.sign(
+          { userId: user._id },
+          process.env.JWT_KEY, 
+          { expiresIn: "10h" }
+          );
+        return res.status(201).send({ token, user, message: "Login Successful" });
       }
     }
     return res.status(500).send({ error: "Invalid Credentials" });
