@@ -60,7 +60,7 @@ exports.userLogin = async (req, res) => {
           { expiresIn: "10h" }
           );
           // Send the token in the response header
-          res.setHeader('Authorization', `Bearer ${token}`);
+          // res.setHeader('Authorization', `Bearer ${token}`);
         return res.status(201).send({ token, user, message: "Login Successful" });
       }
     }
