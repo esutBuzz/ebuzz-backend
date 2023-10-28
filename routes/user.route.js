@@ -4,6 +4,9 @@ const userController = require("../controllers/user.controller");
 const validateCredentials = require("../middlewares/validateUser")
 const { rateLimit } = require ('express-rate-limit')
 
+// Enable trust proxy to handle X-Forwarded-For header
+router.set('trust proxy', true);
+
 const limiter = rateLimit({
 	windowMs: 5 * 1000, // 5 seconds
 	limit: 10, // Limit each IP to 10 requests per `window` (here, per 5 seconds)
