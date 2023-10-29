@@ -130,3 +130,26 @@ exports.deletePostById = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAllExistingPosts = async (req, res) => {
+  try {
+    // Import your User model and get all user IDs
+    const User = require('../models/user.model');
+    const users = await User.find({}, '_id'); // Retrieve all user IDs
+
+    // Initialize an array to store all posts
+    const allPosts = [];
+
+    for (const user of users) {
+      const posts = await Post.find({ author: user._id, deleted: false })
+        .populate({ path: 'author', select: 'username' })
+        .sort({ createdAt: -1 });
+      allPosts.push(...posts);
+    }
+
+    res.status(200).json(allPosts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error occurred while fetching posts' });
+  }
+};

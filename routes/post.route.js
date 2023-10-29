@@ -20,6 +20,9 @@ router.post("/users/:userId/posts", uploadMiddleware, postController.createPost)
 // Get all posts
 router.get("/users/:userId/posts", postController.getAllPosts);
 
+// Get all existing post on the database
+router.get("/users/posts/allPosts", postController.getAllExistingPosts)
+
 // Get a post by ID
 router.get("/users/:userId/posts/:postId", postController.getPostById);
 
