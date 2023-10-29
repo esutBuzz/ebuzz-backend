@@ -16,7 +16,7 @@ exports.createPost = async (req, res) => {
   console.log("authorId : " + author);
   console.log(req.files);
 
-  const files = req.files || []; // Assuming req.files is an array of uploaded files
+  const files = req.files || [] || String; // Assuming req.files is an array of uploaded files
   const filePaths = files.map((file) => file.path); // Store file paths
 
   try {
