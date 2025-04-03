@@ -1,6 +1,7 @@
 const Post = require("../models/post.model");
 const path = require("path");
 
+
 // Function to validate input fields
 const validateInput = (author, content) => {
   if (!author || !content) {
@@ -11,19 +12,21 @@ const validateInput = (author, content) => {
 
 // Create a new post
 exports.createPost = async (req, res) => {
-  const { author, content } = req.body;
-  validateInput(author, content);
-  console.log("authorId : " + author);
-  console.log(req.files);
-
-  const files = req.files || []; // Assuming req.files is an array of uploaded files
+  const { author, content, files } = req.body;
+  console.log(req.body)
+  validateInput(author, content, files);
+  //console.log("authorId : " + author);
+ // console.log(req.files);
+  // const imageBuffer = Buffer.from(JSON.stringify(req.files), 'base64');
+  // console.log(imageBuffer.toString('base64'))
+  //const files = req.files || []; // Assuming req.files is an array of uploaded files
   const filePaths = files.map((file) => file.path); // Store file paths
 
   try {
     const post = await Post.create({
       author,
       content,
-      files: filePaths,
+      files
     });
     res.status(201).json({
       message: "Post made successfully",
